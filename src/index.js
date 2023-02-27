@@ -38,46 +38,46 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-    let arrmorse = expr.split("");
-    while (arrmorse[0] === '0') arrmorse.shift()
-    while (arrmorse[arrmorse.length - 1] === '0') arrmorse.pop()
-    let newExpr = arrmorse.join('');
-    if (newExpr.indexOf('0') < 0) 
-    return '.';
- 
-    for (let i = 1; ; i++) {
-    if (newExpr.indexOf(`1${"0".repeat(i)}1`) >= 0 ||
-         newExpr.indexOf(`${"1".repeat(i+1)}`) < 0) {
-             newExpr = newExpr.replace(new RegExp(`0{${i}}`, 'g'), '0')
-             .replace(new RegExp(`1{${i}}`, 'g'), '1' )
-             //.replace(new RegExp(`*{${i}}`, 'g'), '*' )
-             break
-         }
-     }
-     return newExpr
-     .replace(/111/g, '-')
-     .replace(/000/g, ' ')
-     .replace(/1/g, '.')
-     .replace(/0/g, '');
- 
- }
- 
- function morsedecode(decodemorse) {
-     let morseArray = decodemorse.split(" ");
-     for (let i = 0; i < morseArray; i++) {
-         if (morseArray[i] === "" && morseArray[i+1] === "") {
-             morseArray.splice(i, 2, ' ')
- 
-         }
-     if (morseArray[i] !== "") {
-         morseArray[i] = MORSE_TABLE[morseArray[i]]
-     }
- else {
-     morseArray[i] = ' '
- 
- }}
- return morseArray.join('')
- }
+
+    let arr =[];
+    for(let i=0;i<expr.length;i+=10){
+        arr.push(expr.slice(i,i+10))
+    }
+
+    let arr2 = []
+    for(let i= 0;i<arr.length;i++){
+        let charCode = ""
+        let str =arr[i]
+        if(arr[i]==="**********"){
+            arr2.push(" ")
+        } else{
+        for (let j=0;j<str.length;j= j+2){
+            if(str.slice(j,j+2)==="10"){
+
+                charCode =charCode+"."
+            }
+            if(arr[i].slice(j,j+2)==="11"){
+                charCode+="-"
+            }
+        }
+        arr2.push(charCode)
+
+    }}
+    console.log(arr2)
+    let res = arr2.reduce((res1,el)=>{
+        if(MORSE_TABLE.hasOwnProperty(el)){
+            res1=res1+MORSE_TABLE[el]
+        }else{
+            res1 =res1+" "
+        }
+        return res1
+    },"")
+    console.log(res)
+    return res
+
+}
+
+
 
 
 module.exports = {
